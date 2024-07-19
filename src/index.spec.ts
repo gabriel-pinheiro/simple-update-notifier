@@ -8,10 +8,12 @@ jest.mock('./hasNewVersion', () => jest.fn().mockResolvedValue('2.0.0'));
 beforeEach(jest.clearAllMocks);
 
 test('it logs message if update is available', async () => {
-  await simpleUpdateNotifier({
+  const notify = await simpleUpdateNotifier({
     pkg: { name: 'test', version: '1.0.0' },
     alwaysRun: true,
   });
+
+  notify();
 
   expect(consoleSpy).toHaveBeenCalledTimes(1);
 });

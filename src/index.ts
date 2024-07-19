@@ -3,6 +3,18 @@ import hasNewVersion from './hasNewVersion';
 import { IUpdate } from './types';
 import borderedText from './borderedText';
 
+const printUpdateMessage = (
+  pkgName: string,
+  oldVersion: string,
+  latestVersion: string
+) => {
+  console.error(
+    borderedText(`New version of ${pkgName} available!
+Current Version: ${oldVersion}
+Latest Version: ${latestVersion}`)
+  );
+};
+
 const simpleUpdateNotifier = async (args: IUpdate) => {
   if (
     !args.alwaysRun &&
@@ -17,11 +29,8 @@ const simpleUpdateNotifier = async (args: IUpdate) => {
   try {
     const latestVersion = await hasNewVersion(args);
     if (latestVersion) {
-      console.error(
-        borderedText(`New version of ${args.pkg.name} available!
-Current Version: ${args.pkg.version}
-Latest Version: ${latestVersion}`)
-      );
+      return () =>
+        printUpdateMessage(args.pkg.name, args.pkg.version, latestVersion);
     }
   } catch (err) {
     // Catch any network errors or cache writing errors so module doesn't cause a crash
@@ -29,6 +38,8 @@ Latest Version: ${latestVersion}`)
       console.error('Unexpected error in simpleUpdateNotifier():', err);
     }
   }
+
+  return () => {};
 };
 
 export default simpleUpdateNotifier;
