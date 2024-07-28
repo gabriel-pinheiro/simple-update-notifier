@@ -39,7 +39,7 @@ const simpleUpdateNotifier = async (args: IUpdate) => {
     }
   }
 
-  return () => {};
+  return null;
 };
 
 export default simpleUpdateNotifier;
